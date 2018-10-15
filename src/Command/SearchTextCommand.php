@@ -69,7 +69,7 @@ class SearchTextCommand extends Command
             }
         }
 
-        $output->writeln('<success>Result is: ' . $result .'</success>');
+        $output->writeln('<success>' . $result .'</success>');
 
         return 0;
     }

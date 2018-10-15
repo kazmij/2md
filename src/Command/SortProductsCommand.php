@@ -81,7 +81,6 @@ class SortProductsCommand extends Command
             array_multisort($prices, SORT_NUMERIC, SORT_ASC, $titles, SORT_STRING, SORT_ASC, $productsArray);
 
             //Show result array (JSON string)
-            $output->writeln("<success>Result JSON string:</success>");
             $output->writeln(json_encode($productsArray));
         }
 
