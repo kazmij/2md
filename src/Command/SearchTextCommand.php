@@ -35,7 +35,7 @@ class SearchTextCommand extends Command
             // configure an argument
             ->addArgument('text', InputArgument::REQUIRED, 'The text to search case insensitive "John" and "Mary" names')
             // the short description shown while running "php bin/console list"
-            ->setDescription('Search for case insensitive "John" and "Mary" names in string parameter text.')
+            ->setDescription('Search for case insensitive "John" and "Mary" names in string parameter text. The command is looking only for whole words.')
             // the full command description shown when running the command with
             // the "--help" option
             ->setHelp('This command allows you search case insensitive names "John" and "Mary" in the entered text');
@@ -52,24 +52,32 @@ class SearchTextCommand extends Command
         //Set styles for command outputs
         $outputStyle = new OutputFormatterStyle('green', null, array('bold', 'blink'));
         $output->getFormatter()->setStyle('success', $outputStyle);
-        //get input string and change it to lowercase
-        $text = strtolower($input->getArgument('text'));
+        //get input string and
+        $text = $input->getArgument('text');
+        //transform it to lower and trim spaces
+        $text = strtolower(trim($text));
+        //remove not needed chars from array
+        $texts = array_map(function ($entry) {
+            return preg_replace('/[\s\v\h\.,]/', '', $entry);
+        }, explode(' ', $text));
         //array to store number of names occurrences
         $occurrencesCount = [];
         //default result is 1
         $result = 1;
 
-        //loop names and count them occurrences
         foreach (self::NAMES as $key => $name) {
-            $occurrencesCount[$key] = substr_count($text, strtolower($name));
+            //count number of occurrences $name in array
+            $occurrencesCount[$key] = count(array_filter($texts, function($entry) use ($name){
+                return $entry === strtolower($name);
+            }));
             //Break if the occurrences count is different than previous. It does not sense to count it further.
-            if($key > 0 && $occurrencesCount[$key - 1] !== $occurrencesCount[$key]) {
+            if ($key > 0 && $occurrencesCount[$key - 1] !== $occurrencesCount[$key]) {
                 $result = 0;
                 break;
             }
         }
 
-        $output->writeln('<success>' . $result .'</success>');
+        $output->writeln('<success>' . $result . '</success>');
 
         return 0;
     }
