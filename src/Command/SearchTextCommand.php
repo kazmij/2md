@@ -58,7 +58,7 @@ class SearchTextCommand extends Command
         $text = strtolower(trim($text));
         //remove not needed chars from array
         $texts = array_map(function ($entry) {
-            return preg_replace('/[\s\v\h\.,]/', '', $entry);
+            return preg_replace('/[\s\v\h\.,]/im', '', $entry);
         }, explode(' ', $text));
         //array to store number of names occurrences
         $occurrencesCount = [];
