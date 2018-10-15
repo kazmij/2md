@@ -28,7 +28,7 @@ class SearchTextCommandTest extends KernelTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute(array(
             'command' => $command->getName(),
-            'text' => 'John and Merry got married 5 years ago. John is very happy that Mary is his wife. Mary is a teacher and loves her job.',
+            'text' => 'John and Mary got married 5 years ago. John is very happy that Mary is his wife.',
         ));
 
         $output = $commandTester->getDisplay();
@@ -36,7 +36,7 @@ class SearchTextCommandTest extends KernelTestCase
 
         $commandTester->execute(array(
             'command' => $command->getName(),
-            'text' => 'John and Merry got married 5 years ago. John is very happy that Mary is his wife. Mary is a teacher and loves her job. Johnny is a mechanic and also loves his job.',
+            'text' => 'John and Mary got married 5 years ago. John is very happy that Mary is his wife. Mary is a teacher and loves her job.',
         ));
 
         $output = $commandTester->getDisplay();
